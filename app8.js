@@ -41,9 +41,9 @@ app.get("/omikuji2", (req, res) => {
 });
 
 app.get("/janken", (req, res) => {
-  let hand = req.query.hand;
-  let win = Number( req.query.win );
-  let total = Number( req.query.total );
+  let hand = req.query.radio;
+  let win = Number( req.query.win )|| 0;
+  let total = Number( req.query.total )|| 0;
   console.log( {hand, win, total});
   const num = Math.floor( Math.random() * 3 + 1 );
   let cpu = '';
@@ -54,9 +54,24 @@ app.get("/janken", (req, res) => {
   // ここに勝敗の判定を入れる
   // 以下の数行は人間の勝ちの場合の処理なので，
   // 判定に沿ってあいこと負けの処理を追加する
+  if((cpu == 'グー' && hand == '3')||(cpu == 'チョキ' && hand == '1')|(cpu == 'パー' && hand == '2')) {
   judgement = '勝ち';
   win += 1;
+  // total += 1;
+  } else if((cpu == 'グー' && hand == '1')||(cpu == 'チョキ' && hand == '2')|(cpu == 'パー' && hand == '3')) {
+  judgement = 'あいこ';
+  // total += 1;
+  } else {
+  judgement = '負け';
+  // total += 1;
+  }
   total += 1;
+
+  if(total > 20) {
+    total = 0;
+    win = 0;
+  }
+
   const display = {
     your: hand,
     cpu: cpu,
@@ -64,7 +79,7 @@ app.get("/janken", (req, res) => {
     win: win,
     total: total
   }
-  res.render( 'janken', display );
+  res.render( 'janken_radio', display );
 });
 
 app.get("/get_test", (req, res) => {
