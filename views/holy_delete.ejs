@@ -1,0 +1,25 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>削除確認 - <%= data.name %></title>
+</head>
+<body>
+    <!-- <h2><%= data.name %> をフォーマットしますか？</h2> -->
+    <h2><%= data.name %> を削除しますか？</h2>
+    <table>
+        <tr><th>聖遺物名</th><td><%= data.name %></td></tr>
+        <tr><th>２セット効果</th><td><%= data.two_set %></td></tr>
+        <tr><th>５セット効果</th><td><%= data.two_set %></td></tr>
+        <tr><th>オススメキャラクター</th><td><%= data.chara %></td></tr>
+    </table>
+    <form action="/holy/delete/<%= id %>" method="GET">
+        <input type="submit" values="決定">
+    <!-- <form action="/gold/delete/<%= id %>" method="POST" style="display:inline">
+        <button type="submit">削除する</button> -->
+    </form>
+
+    <a href="/holy/<%= id %>">キャンセル（詳細に戻る）</a>
+    <!-- <a href="/gold/delete/:number">削除</a> -->
+</body>
+</html>

@@ -1,0 +1,22 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>作成確認</title>
+</head>
+<body>
+
+    <h2>黄金裔作成</h2>
+    <form action="/gold/create" method="POST">
+    <table>
+        <tr><th>項目</th><th>データ</th></tr>
+        <tr><td>因子個体の識別コード</td><td><input type="text" name="code" required></td></tr>
+        <tr><td>キャラクター名</td><td><input type="text" name="name" required></td></tr>
+        <tr><td>火種</td><td><input type="text" name="spark" required></td></tr>
+        <tr><td>神権</td><td><input type="text" name="divine" required></td></tr>
+    </table>
+        <input type="submit" values="追加">
+    </form>
+
+    <a href="/gold">キャンセル（一覧に戻る）</a>
+</body>

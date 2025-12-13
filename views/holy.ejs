@@ -1,0 +1,14 @@
+<table>
+<tr><th>ID</th><th>聖遺物名</th><th>２セット効果</th></tr>
+
+<% data.forEach((row, index) => { %>
+<tr>
+    <td><%= row.id %></td>
+    <!-- <td><%= row.name %></td> -->
+    <td><a href="/holy/<%= index %>"><%= row.name %></a></td>
+    <td><%= row.two_set %></td>
+</tr>
+<% }) %>
+
+</table>
+<a href="/holy/create">追加</a>

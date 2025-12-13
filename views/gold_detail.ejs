@@ -1,0 +1,23 @@
+<!Doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title><%= data.name %></title>
+</head>
+<body>
+    <h2><%= data.name %>の詳細</h2>
+    <table>
+        <tr><th>項目</th><th>データ</th></tr>
+        <tr><td>因子個体の識別コード</td><td><%= data.code %></td></tr>
+        <tr><td>キャラクター名</td><td><%= data.name %></td></tr>
+        <tr><td>火種</td><td><%= data.spark %></td></tr>
+        <tr><td>神権</td><td><%= data.divine %></td></tr>
+    </table>
+    <!-- <a href="/gold/edit/<%= id %>">編集</a> -->
+    <a href="/gold">黄金裔一覧に戻る</a>
+    <a href="/gold/edit/<%= id %>">編集</a>
+    <a href="/gold_delete/<%= id %>">削除</a>
+    <!-- <a href="gold_delete/<%= id %>">削除</a> -->
+    <!-- <a href="/gold/delete/<%= id %>">削除</a> -->
+</body>
+</html>

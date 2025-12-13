@@ -1,0 +1,30 @@
+<!Doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title><%= data.name %></title>
+</head>
+<body>
+    <h2><%= data.name %>の編集</h2>
+    <!-- <form action="/gold/update/<%= data.id - 1 %>" method="POST"> -->
+    <form action="/holy/update/<%= id %>" method="POST">
+    <table>
+        <tr><th>項目</th><th>データ</th></tr>
+        <!-- <tr><td>ID</td><td><input type="numer" name="id" value="<%= data.id %>"></td></tr> -->
+        <tr><td>聖遺物名</td><td><input type="text" name="name" value="<%= data.name %>"></td></tr>
+        <!-- <tr><td>２セット効果</td><td><input type="text" name="two_set" value="<%= data.two_set %>"></td></tr>
+        <tr><td>５セット効果</td><td><input type="text" name="five_set" value="<%= data.five_set %>"></td></tr>
+        <tr><td>おすすめキャラクター</td><td><input type="text" rows="10" cols="60" name="chara" value="<%= data.chara %>"></td></tr> -->
+    <tr><td>２セット効果</td><td><textarea name="two_set" rows="2" cols="60"><%= data.two_set %></textarea></td></tr>
+    <tr><td>５セット効果</td><td><textarea name="five_set" rows="13" cols="60"><%= data.five_set %></textarea></td></tr>
+    <tr><td>おすすめキャラクター</td><td><textarea name="chara" rows="4" cols="60"><%= data.chara %></textarea></td></tr>
+
+    </table>
+    <input type="submit" values="登録">
+    </form>
+    <a href="/holy/<%= id %>">キャラクター詳細に戻る</a>
+</body>
+</html>
+
+<!-- rows="10" cols="60" 枠の縦横を大きくする
+style="font-size:50px;" 枠を大きくする -->

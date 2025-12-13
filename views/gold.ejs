@@ -1,0 +1,15 @@
+<table>
+<tr><th>ID</th><th>因子個体の識別コード</th><th>キャラ名</th></tr>
+
+<% data.forEach((row, index) => { %>
+<tr>
+    <td><%= row.id %></td>
+    <td><%= row.code %></td>
+    <td><a href="/gold/<%= index %>"><%= row.name %></a></td>
+</tr>
+<% }) %>
+
+</table>
+<a href="/gold/create">追加</a>
+
+

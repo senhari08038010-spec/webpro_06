@@ -1,0 +1,27 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>削除確認 - <%= data.name %></title>
+</head>
+<body>
+    <!-- <h2><%= data.name %> をフォーマットしますか？</h2> -->
+    <h2><%= data.code %> をフォーマットしますか？</h2>
+    <table>
+        <tr><th>因子個体の識別コード</th><td><%= data.code %></td></tr>
+        <tr><th>キャラクター名</th><td><%= data.name %></td></tr>
+        <tr><th>火種</th><td><%= data.spark %></td></tr>
+        <tr><th>神権</th><td><%= data.divine %></td></tr>
+    </table>
+    <form action="/gold/delete/<%= id %>" method="GET">
+        <input type="submit" values="決定">
+    <!-- <form action="/gold/delete/<%= id %>" method="POST" style="display:inline">
+        <button type="submit">削除する</button> -->
+    </form>
+
+    <a href="/gold/<%= id %>">キャンセル（詳細に戻る）</a>
+    <!-- <a href="/gold/delete/:number">削除</a> -->
+</body>
+</html>
+
+
