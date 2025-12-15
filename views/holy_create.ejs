@@ -7,30 +7,15 @@
 <body>
     <h2>聖遺物の追加</h2>
 
-    <form action="/holy/create" method="POST">
+    <form action="/holy_create" method="POST">
         <table>
-            <tr>
-                <td>聖遺物名</td>
-                <td><textarea name="name" rows="3" cols="40"></textarea></td>
-            </tr>
-
-            <tr>
-                <td>２セット効果</td>
-                <td><textarea name="two_set" rows="5" cols="60"></textarea></td>
-            </tr>
-
-            <tr>
-                <td>５セット効果</td>
-                <td><textarea name="five_set" rows="5" cols="60"></textarea></td>
-            </tr>
-
-            <tr>
-                <td>おすすめキャラ</td>
-                <td><textarea name="chara" rows="5" cols="60"></textarea></td>
-            </tr>
+            <tr><td>聖遺物名</td><td><textarea name="name" rows="3" cols="40"></textarea></td></tr>
+            <tr><td>２セット効果</td><td><textarea name="two_set" rows="5" cols="60"></textarea></td></tr>
+            <tr><td>５セット効果</td><td><textarea name="five_set" rows="5" cols="60"></textarea></td></tr>
+            <tr><td>おすすめキャラ</td><td><textarea name="chara" rows="5" cols="60"></textarea></td></tr>
         </table>
 
-        <button type="submit">追加</button>
+        <input type="submit" values="追加">
     </form>
 
     <a href="/holy">一覧に戻る</a>

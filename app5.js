@@ -28,9 +28,9 @@ app.get("/gold", (req, res) => {
   res.render('gold', {data: ougonei} );
 });
 
-//create
+//create2
 app.get("/gold/create", (req, res) => {
-  res.redirect('/public/gold.html');
+  res.render('gold_create');
 });
 
 //Delete_check
@@ -62,7 +62,7 @@ app.get("/gold/:number", (req, res) => {
 });
 
 // Create
-app.post("/gold", (req, res) => {
+app.post("/gold_create", (req, res) => {
   // 本来ならここにDBとのやり取りが入る
   const id = ougonei.length + 1;
   const code = req.body.code;
@@ -144,9 +144,14 @@ app.get("/holy", (req, res) => {
   res.render('holy', {data: relic} );
 });
 
-//create
+// //create
+// app.get("/holy/create", (req, res) => {
+//   res.redirect('/public/holy.html');
+// });
+
+//create2
 app.get("/holy/create", (req, res) => {
-  res.redirect('/public/holy.html');
+  res.render('holy_create');
 });
 
 //Delete_check
@@ -178,7 +183,7 @@ app.get("/holy/:number", (req, res) => {
 });
 
 // Create
-app.post("/holy", (req, res) => {
+app.post("/holy_create", (req, res) => {
   const id = relic.length + 1;
   const name = req.body.name;
   const two_set = req.body.two_set;
@@ -210,10 +215,113 @@ app.post("/holy/update/:number", (req, res) => {
   res.redirect(`/holy/${number}`);
 });
 
-//################################## マーヴィカ　コンボ一覧 ###########################
-let combo = [
-  {id:1, }
-]
+//################################## 鳴潮　限定星５所持キャラ育成度 ###########################
+let  states = [
+  {id:1, name:"カルロッタ", weapon:"ラストダンス", chain:0, sound:"フロステッド・ハート", H:19687, A:2129, B:1257, C_H:70.1, C_D:297.0, charge:116.8, effect:60.0, usual:10, skill:6, circuit:10, release:10, variation:4},
+  {id:2, name:"長離", weapon:"千古の湖水", chain:0, sound:"山を轟かせる崩火", H:17051, A:2201, B:1354, C_H:81.2, C_D:195.0, charge:132.8, effect:70.0, usual:4, skill:10, circuit:10, release:8, variation:1},
+  {id:3, name:"フローヴァ", weapon:"弾む輝き", chain:0, sound:"ロスト・ドリーム", H:15942, A:1742, B:1651, C_H:70.7, C_D:243.3, charge:106.8, effect:70.0, usual:10, skill:5, circuit:9, release:10, variation:1},
+  {id:4, name:"ショアキーパー", weapon:"奇妙バリエーション", chain:0, sound:"喧騒に隠す回光", H:32819, A:1174, B:1394, C_H:28.1, C_D:169.8, charge:237.4, effect:48.8, usual:1, skill:5, circuit:5, release:10, variation:8},
+  {id:5, name:"オーガスタ", weapon:"雷霆を統べし王剣", chain:0, sound:"グローリーフォージ・クラウン，空を切り裂く冥雷", H:17376, A:2493, B:1343, C_H:88.2, C_D:217.8, charge:100.0, effect:70.0, usual:7, skill:6, circuit:10, release:10, variation:1},
+  {id:6, name:"ユーノ", weapon:"万物を書き留める月相", chain:0, sound:"グローリーフォージ・クラウン，谷を突き抜ける長風", H:15684, A:2014, B:1423, C_H:87.7, C_D:166.6, charge:120.8, effect:70.0, usual:6, skill:6, circuit:10, release:10, variation:1},
+  {id:7, name:"千咲", weapon:"曇斬", chain:2, sound:"命理崩壊の弦，二度と輝かない沈日", H:17356, A:2067, B:1309, C_H:88.3, C_D:275.0, charge:100.0, effect:135.0, usual:10, skill:10, circuit:10, release:10, variation:10},
+  {id:8, name:"カルテジア", weapon:"辺守迅刀・鎮護", chain:0, sound:"グロリアス・ウィンド", H:42816, A:1032, B:841, C_H:64.4, C_D:237.8, charge:100.0, effect:30.0, usual:7, skill:6, circuit:10, release:10, variation:6},
+];
+
+
+// 一覧
+app.get("/character", (req, res) => {
+  res.render('character', {data: states} );
+});
+
+//create2
+app.get("/character/create", (req, res) => {
+  res.render('character_create');
+});
+
+//Delete_check
+app.get("/character_delete/:number", (req, res) => {
+  // 本来ならここにDBとのやり取りが入る
+  const number = req.params.number;
+  const detail = states[ number ];
+  res.render('character_delete', {id: number, data: detail} );
+});
+
+// Delete
+app.get("/character/delete/:number", (req, res) => {
+  // 本来は削除の確認ページを表示する
+  // 本来は削除する番号が存在するか厳重にチェックする
+  // 本来ならここにDBとのやり取りが入る
+  states.splice( req.params.number, 1 );
+  // const index = Number(req.params.number);
+  // ougonei.splice(index, 1);
+
+  res.redirect('/character' );
+});
+
+//Read
+app.get("/character/:number", (req, res) => {
+  // 本来ならここにDBとのやり取りが入る
+  const number = req.params.number;
+  const detail = states[ number ];
+  res.render('character_detail', {id: number, data: detail} );
+});
+
+// Create
+app.post("/character_create", (req, res) => {
+  const id = states.length + 1;
+  const name = req.body.name;
+  const weapon = req.body.weapon;
+  const chain = req.body.chain;
+  const sound = req.body.sound;
+  const H = req.body.H;
+  const A = req.body.A;
+  const B = req.body.B;
+  const C_H = req.body.C_H;
+  const C_D = req.body.C_D;
+  const charge = req.body.charge;
+  const effect = req.body.effect;
+  const usual = req.body.usual;
+  const skill = req.body.skill;
+  const circuit = req.body.circuit;
+  const release = req.body.release;
+  const variation = req.body.variation;
+  states.push( { id: id, name: name, weapon: weapon, chain: chain, sound: sound, H: H, A: A, B: B, C_H: C_H, C_D: C_D, charge: charge, effect: effect, usual: usual, skill: skill, circuit: circuit, release: release, variation: variation } );
+  console.log( states );
+  res.render('character', {data: states} );
+});
+
+// Edit
+app.get("/character/edit/:number", (req, res) => {
+  // 本来ならここにDBとのやり取りが入る
+  const number = req.params.number;
+  const detail = states[ number ];
+  res.render('character_edit', {id: number, data: detail} );
+});
+
+// Update
+app.post("/character/update/:number", (req, res) => {
+  const number = req.params.number;   // ← これが超重要！！
+  // 本来は変更する番号が存在するか，各項目が正しいか厳重にチェックする
+  // 本来ならここにDBとのやり取りが入る
+  states[req.params.number].name = req.body.name;
+  states[req.params.number].weapon = req.body.weapon;
+  states[req.params.number].chain = req.body.chain;
+  states[req.params.number].sound = req.body.sound;
+  states[req.params.number].H = req.body.H;
+  states[req.params.number].A = req.body.A;
+  states[req.params.number].B = req.body.B;
+  states[req.params.number].C_H = req.body.C_H;
+  states[req.params.number].C_D = req.body.C_D;
+  states[req.params.number].charge = req.body.charge;
+  states[req.params.number].effect = req.body.effect;
+  states[req.params.number].usual = req.body.usual;
+  states[req.params.number].skill = req.body.skill;
+  states[req.params.number].circuit = req.body.circuit;
+  states[req.params.number].release = req.body.release;
+  states[req.params.number].variation = req.body.variation;
+  console.log( states );
+  res.redirect(`/character/${number}`);
+});
 
 // ################################# 京葉線駅データ管理 ##############################
 

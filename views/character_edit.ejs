@@ -1,0 +1,36 @@
+<!Doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title><%= data.name %></title>
+</head>
+<body>
+    <h2><%= data.name %>の詳細編集</h2>
+    <!-- <form action="/gold/update/<%= data.id - 1 %>" method="POST"> -->
+    <form action="/character/update/<%= id %>" method="POST">
+    <table>
+        <tr><th>項目</th><th>データ</th></tr>
+
+        <tr><td>ID</td><td><input type="number" name="id" value="<%= data.id %>" readonly></td></tr>
+        <tr><td>キャラクター名</td><td><input type="text" name="name" value="<%= data.name %>"></td></tr>
+        <tr><td>武器</td><td><input type="text" name="weapon" value="<%= data.weapon %>"></td></tr>
+        <tr><td>チェイン数</td><td><input type="number" name="chain" value="<%= data.chain %>"></td></tr>
+        <tr><td>共鳴音骸</td><td><input type="text" name="sound" value="<%= data.sound %>"></td></tr>
+        <tr><td>HP</td><td><input type="number" name="H" value="<%= data.H %>"></td></tr>
+        <tr><td>攻撃力</td><td><input type="number" name="A" value="<%= data.A %>"></td></tr>
+        <tr><td>防御力</td><td><input type="number" name="B" value="<%= data.B %>"></td></tr>
+        <tr><td>会心率 (%)</td><td><input type="number" name="C_H" value="<%= data.C_H %>"></td></tr>
+        <tr><td>会心ダメージ (%)</td><td><input type="number" name="C_D" value="<%= data.C_D %>"></td></tr>
+        <tr><td>チャージ効率 (%)</td><td><input type="number" name="charge" value="<%= data.charge %>"></td></tr>
+        <tr><td>属性効果 (%)</td><td><input type="number" name="effect" value="<%= data.effect %>"></td></tr>
+        <tr><td>通常攻撃Lv</td><td><input type="number" name="usual" value="<%= data.usual %>"></td></tr>
+        <tr><td>スキルLv</td><td><input type="number" name="skill" value="<%= data.skill %>"></td></tr>
+        <tr><td>回路Lv</td><td><input type="number" name="circuit" value="<%= data.circuit %>"></td></tr>
+        <tr><td>解放Lv</td><td><input type="number" name="release" value="<%= data.release %>"></td></tr>
+        <tr><td>変奏Lv</td><td><input type="number" name="variation" value="<%= data.variation %>"></td></tr>
+    </table>
+    <input type="submit" values="登録">
+    </form>
+    <a href="/character/<%= id %>">キャラクター詳細に戻る</a>
+</body>
+</html>

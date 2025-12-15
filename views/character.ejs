@@ -1,0 +1,13 @@
+<h2>鳴潮限定星５所持キャラ一覧</h2>
+<table>
+<tr><th>ID</th><th>キャラ名</th></tr>
+
+<% data.forEach((row, index) => { %>
+<tr>
+    <td><%= row.id %></td>
+    <td><a href="/character/<%= index %>"><%= row.name %></a></td>
+</tr>
+<% }) %>
+
+</table>
+<a href="/character/create">追加</a>

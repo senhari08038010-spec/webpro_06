@@ -1,0 +1,37 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>削除確認 - <%= data.name %></title>
+</head>
+<body>
+    <!-- <h2><%= data.name %> をフォーマットしますか？</h2> -->
+    <h2><%= data.name %> を削除しますか？</h2>
+    <table>
+        <tr><td>キャラ名</td><td><%= data.name %></td></tr>
+        <tr><td>武器名</td><td><%= data.weapon %></td></tr>
+        <tr><td>凸数</td><td><%= data.chain %> 凸</td></tr>
+        <tr><td>音骸セット</td><td><%= data.sound %></td></tr>
+        <tr><td>HP</td><td><%= data.H %></td></tr>
+        <tr><td>攻撃力</td><td><%= data.A %></td></tr>
+        <tr><td>防御力</td><td><%= data.B %></td></tr>
+        <tr><td>クリティカル (%)</td><td><%= data.C_H %> %</td></tr>
+        <tr><td>クリダメ (%)</td><td><%= data.C_D %> %</td></tr>
+        <tr><td>共鳴効率 (%)</td><td><%= data.charge %> %</td></tr>
+        <tr><td>ダメバフ(有効なバフ) (%)</td><td><%= data.effect %> %</td></tr>
+        <tr><td>通常攻撃lv</td><td>Lv. <%= data.usual %></td></tr>
+        <tr><td>スキルlv</td><td>Lv. <%= data.skill %></td></tr>
+        <tr><td>共鳴回路lv</td><td>Lv. <%= data.circuit %></td></tr>
+        <tr><td>共鳴解放lv</td><td>Lv. <%= data.release %></td></tr>
+        <tr><td>変奏スキルlv</td><td>Lv. <%= data.variation %></td></tr>
+    </table>
+    <form action="/character/delete/<%= id %>" method="GET">
+        <input type="submit" values="決定">
+    <!-- <form action="/gold/delete/<%= id %>" method="POST" style="display:inline">
+        <button type="submit">削除する</button> -->
+    </form>
+
+    <a href="/character/<%= id %>">キャンセル（詳細に戻る）</a>
+    <!-- <a href="/gold/delete/:number">削除</a> -->
+</body>
+</html>
