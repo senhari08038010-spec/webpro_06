@@ -1,0 +1,114 @@
+\documentclass[uplatex,dvipdfmx]{jsarticle}
+
+\usepackage[uplatex,deluxe]{otf} % UTF
+\usepackage[noalphabet]{pxchfon} % must be after otf package
+\usepackage{stix2} %欧文＆数式フォント
+\usepackage[fleqn,tbtags]{mathtools} % 数式関連 (w/ amsmath)
+\usepackage{hira-stix} % ヒラギノフォント＆STIX2 フォント代替定義（Warning回避）
+\usepackage{float}%図のせいで文章がおかしくならないようにする
+\usepackage{url}%URL貼れるようになる
+\usepackage[dvipdfmx]{hyperref}%URLが改行されても大丈夫になる！
+
+\usepackage{verbatim}
+\usepackage{listings}
+% \usepackage{listings,japanese}
+\lstset{%プログラミングコードの書き方設定
+    basicstyle={\ttfamily},
+    identifierstyle={\small},
+    commentstyle={\smallitshape},
+    keywordstyle={\small\bfseries},
+    ndkeywordstyle={\small},
+    stringstyle={\small\ttfamily},
+    frame={tb},
+    breaklines=true,
+    columns=[l]{fullflexible},
+    numbers=left,
+    xrightmargin=0zw,
+    xleftmargin=3zw,
+    numberstyle={\scriptsize},
+    stepnumber=1,
+    numbersep=1zw,
+    lineskip=-0.5ex
+}
+\renewcommand{\lstlistingname}{プログラム}
+
+\newcounter{listingctr}
+\renewcommand{\thelistingctr}{\arabic{listingctr}}
+
+\newenvironment{listing}{
+    \refstepcounter{listingctr}
+}{}
+
+
+\begin{document}
+
+\title{基本的なデータ表示のWebアプリ開発}
+\author{泉水悠斗}
+\date{\today}
+\maketitle
+
+\section{はじめに}
+本報告書では，一覧表示を中心としたwebアプリケーションである黄金裔システム，原神星５聖遺物
+システム，鳴潮限定星５所持キャラシステムの3種類開発した．
+各アプリケーションは，データを一覧形式で提示することで利用者が情報を直感的に把握できる構成
+とし，基本的な操作性と拡張性を考慮して設計している．本レポートでは、作成したWebアプリケー
+ションについて，管理者の視点から機能の説明を行う．
+
+\section{概要}
+管理者の視点から見た本Webアプリケーションは，データの管理および運用を効率的に行うための管理
+支援システムである．管理者は，情報の追加・更新・削除といった操作を通じて，一覧に表示される
+データの整合性を維持できる．また，システム全体の状態を把握しやすい構成とすることで，運用負
+荷の軽減を図っている．
+
+\section{サーバーの起動方法}
+サーバー(app5.js)の起動方法について説明する．
+
+% \begin{enumerate}
+%     \item ターミナルでJavaScript ファイルがあるディレクトリに移動する．
+%     （例：cd documents/1\_2S/webpro/webpro\_06）
+%     \item app5.jsを次のように実行する．\\
+%     \$ node app5.js
+% \end{enumerate}
+初めに，ターミナルでJavaScript ファイルがあるディレクトリに移動し，
+そこでプログラム\ref{server}を実行する．
+\begin{lstlisting}[caption=サーバーの起動する際のプログラム,label=server]
+    $ node app5.js
+\end{lstlisting}
+実行した際に Example app listening on port 8080! のように表示されればサーバーの
+起動が成功している．
+
+\section{サーバーへの接続方法}
+\subsubsection{telnetを使用して接続する方法}
+telnetを使用して接続する方法について説明する．初めに，サーバーにアクセスするのに
+コマンド\ref{tlnet}のプログラムを実行する
+
+\begin{lstlisting}[caption=サーバーにアクセスする際のプログラム,label=telnet]
+    $ telnet localhost 8080 
+\end{lstlisting}
+
+次に，プログラム\ref{reqest}を実行しサーバーへのリクエストを行う．なお，１行目を書き終えた
+際に一回，2行目を書き終えた際に2回Enterキーを押す必要がある．
+
+\begin{lstlisting}[caption=サーバーにリクエストをする際のプログラム,label=reqest]
+    GET /gold HTTP/1.1
+    HOST: localhost
+\end{lstlisting}
+
+\subsection{googleなどでの接続}
+googleなどを使用した接続方法について説明する．URLで以下のように実行することで
+一覧ページにアクセスすることができる．
+
+\begin{lstlisting}[caption=googleなどでサーバーにリクエストをする際のプログラム,label=google]
+    http://localhost:8080/holy
+\end{lstlisting}
+
+\section{起動できない場合}
+サーバーを起動しないまま，クライアント側から接続をしようとすると，接続できない状況
+になることがある．
+
+\section{終了方法}
+終了する際は，サーバーを動かしているターミナルで Control + c と入力することで
+サーバーを終了することができる．
+
+
+\end{document}

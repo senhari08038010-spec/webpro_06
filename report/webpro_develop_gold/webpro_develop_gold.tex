@@ -1,0 +1,50 @@
+\documentclass[uplatex,dvipdfmx]{jsarticle}
+
+\usepackage[uplatex,deluxe]{otf} % UTF
+\usepackage[noalphabet]{pxchfon} % must be after otf package
+\usepackage{stix2} %欧文＆数式フォント
+\usepackage[fleqn,tbtags]{mathtools} % 数式関連 (w/ amsmath)
+\usepackage{hira-stix} % ヒラギノフォント＆STIX2 フォント代替定義（Warning回避）
+\usepackage{float}%図のせいで文章がおかしくならないようにする
+\usepackage{url}%URL貼れるようになる
+\usepackage[dvipdfmx]{hyperref}%URLが改行されても大丈夫になる！
+
+\usepackage{verbatim}
+\usepackage{listings}
+% \usepackage{listings,japanese}
+\lstset{%プログラミングコードの書き方設定
+    basicstyle={\ttfamily},
+    identifierstyle={\small},
+    commentstyle={\smallitshape},
+    keywordstyle={\small\bfseries},
+    ndkeywordstyle={\small},
+    stringstyle={\small\ttfamily},
+    frame={tb},
+    breaklines=true,
+    columns=[l]{fullflexible},
+    numbers=left,
+    xrightmargin=0zw,
+    xleftmargin=3zw,
+    numberstyle={\scriptsize},
+    stepnumber=1,
+    numbersep=1zw,
+    lineskip=-0.5ex
+}
+\renewcommand{\lstlistingname}{プログラム}
+
+\newcounter{listingctr}
+\renewcommand{\thelistingctr}{\arabic{listingctr}}
+
+\newenvironment{listing}{
+    \refstepcounter{listingctr}
+}{}
+
+
+\begin{document}
+
+\title{基本的なデータ表示のWebアプリ開発}
+\author{泉水悠斗}
+\date{\today}
+\maketitle
+
+\end{document}

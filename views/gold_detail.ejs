@@ -3,6 +3,9 @@
 <head>
     <meta charset="utf-8">
     <title><%= data.name %></title>
+    <style>
+        body {background-color: #E6E6E6; /* 薄い灰色 */}
+    </style>
 </head>
 <body>
     <h2><%= data.name %>の詳細</h2>
@@ -14,9 +17,9 @@
         <tr><td>神権</td><td><%= data.divine %></td></tr>
     </table>
     <!-- <a href="/gold/edit/<%= id %>">編集</a> -->
-    <a href="/gold">黄金裔一覧に戻る</a>
-    <a href="/gold/edit/<%= id %>">編集</a>
-    <a href="/gold_delete/<%= id %>">削除</a>
+    <a href="/gold">黄金裔一覧に戻る</a><br>
+    <a href="/gold/edit/<%= id %>">編集</a><br>
+    <a href="/gold_delete/<%= id %>">削除</a><br>
     <!-- <a href="gold_delete/<%= id %>">削除</a> -->
     <!-- <a href="/gold/delete/<%= id %>">削除</a> -->
 </body>

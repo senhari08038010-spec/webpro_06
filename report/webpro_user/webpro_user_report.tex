@@ -1,0 +1,234 @@
+\documentclass[uplatex,dvipdfmx]{jsarticle}
+
+\usepackage[uplatex,deluxe]{otf} % UTF
+\usepackage[noalphabet]{pxchfon} % must be after otf package
+\usepackage{stix2} %欧文＆数式フォント
+\usepackage[fleqn,tbtags]{mathtools} % 数式関連 (w/ amsmath)
+\usepackage{hira-stix} % ヒラギノフォント＆STIX2 フォント代替定義（Warning回避）
+\usepackage{float}%図のせいで文章がおかしくならないようにする
+\usepackage{url}%URL貼れるようになる
+\usepackage[dvipdfmx]{hyperref}%URLが改行されても大丈夫になる！
+
+\usepackage{verbatim}
+\usepackage{listings}
+% \usepackage{listings,japanese}
+\lstset{%プログラミングコードの書き方設定
+    basicstyle={\ttfamily},
+    identifierstyle={\small},
+    commentstyle={\smallitshape},
+    keywordstyle={\small\bfseries},
+    ndkeywordstyle={\small},
+    stringstyle={\small\ttfamily},
+    frame={tb},
+    breaklines=true,
+    columns=[l]{fullflexible},
+    numbers=left,
+    xrightmargin=0zw,
+    xleftmargin=3zw,
+    numberstyle={\scriptsize},
+    stepnumber=1,
+    numbersep=1zw,
+    lineskip=-0.5ex
+}
+\renewcommand{\lstlistingname}{プログラム}
+
+\newcounter{listingctr}
+\renewcommand{\thelistingctr}{\arabic{listingctr}}
+
+\newenvironment{listing}{
+    \refstepcounter{listingctr}
+}{}
+
+
+\begin{document}
+
+\title{基本的なデータ表示のWebアプリ開発}
+\author{泉水悠斗}
+\date{\today}
+\maketitle
+
+\section{はじめに}
+本報告書では，一覧表示を中心としたwebアプリケーションである黄金裔システム，原神星５聖遺物
+システム，鳴潮限定星５所持キャラシステムの3種類開発した．
+各アプリケーションは，データを一覧形式で提示することで利用者が情報を直感的に把握できる構成
+とし，基本的な操作性と拡張性を考慮して設計している．本レポートでは、作成したWebアプリケー
+ションについて，利用者の視点から機能の説明を行う．
+
+\section{概要}
+利用者の視点から見た本Webアプリケーションは，登録された情報を一覧形式で閲覧・確認することを
+目的としたシステムである．利用者は，一覧表示されたデータを通して全体の状況を把握でき，
+必要に応じて個々の情報にアクセスすることが可能である．直感的な操作性を重視し，専門的な知識を
+必要とせずに利用できる点が特徴である．
+
+\section{使用できる機能}
+使用できる機能として，一覧表示，詳細表示，データ追加，データ削除，データ編集がある．これらの
+操作は統一しているため，３つのシステムにの操作に大きな差はない．
+
+\section{システムの使い方について}
+例として，黄金裔システムの使用方法を以下に示す．
+
+\subsection{起動画面と一覧表示}
+起動と同時に以下のような一覧表示が表示される．この画面では黄金裔のID，因子個体識別コード，
+キャラ名が確認できる．
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=12cm]{fig_webpro/gold_full.png}
+    \label{gold_full}
+    \caption{一覧表示}
+\end{figure}
+
+また，このページで可能な操作は以下の2つである．
+
+\begin{enumerate}
+    \item キャラ名：選択することによる詳細表示への移動
+    \item 追加リンク：選択することによるデータ追加画面への移動
+\end{enumerate}
+
+なお，原神星５聖遺物システムでは図\ref{holy_full}のようにID，聖遺物名，２セット効果が一覧として
+表示され，鳴潮所持星５キャラシステムでは図\ref{character_full}のようにIDとキャラ名が一覧として
+表示される．
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=12cm]{fig_webpro/holy_full.png}
+    \caption{原神星５聖遺物システムの一覧表示}
+    \label{holy_full}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=12cm]{fig_webpro/character_full.png}
+    \caption{鳴潮所持星５キャラシステムの一覧表示}
+    \label{character_full}
+\end{figure}
+
+\subsection{詳細表示}
+一覧表示で任意のキャラ名を選択した後，以下のような詳細表示画面に移動する．
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=12cm]{fig_webpro/gold_detail.png}
+    \caption{詳細表示}
+    \label{gold_detail}
+\end{figure}
+
+このページでは，因子個体識別コード，キャラ名，神権が確認でき，可能な操作は以下の３つである．
+
+\begin{enumerate}
+    \item 黄金裔一覧に戻る：一覧ページへ戻る
+    \item 編集：編集画面への移動
+    \item 削除：削除画面への移動
+\end{enumerate}
+
+なお，原神星５聖遺物システムでは，図\ref{holy_detail}のように聖遺物名，２セット効果，５セット効果，
+おすすめキャラクターが表示され，鳴潮限定星5所持キャラについてのシステムでは，図\ref{character_detail}のように
+キャラ名，武器名，凸数，音骸セット，HP，攻撃力，防御力，クリティカル（\%），クリダメ（\%），
+共鳴効率（\%），ダメバフ（有効なバフ）（\%），通常攻撃lv，スキルlv，共鳴回路lv，
+共鳴解放lv，変奏スキルlvを表示する．
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=12cm]{fig_webpro/holy_detail.png}
+    \caption{原神星５聖遺物システムの詳細表示}
+    \label{holy_detail}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=12cm]{fig_webpro/character_detail.png}
+    \caption{鳴潮限定星５所持キャラシステムの詳細表示}
+    \label{character_detail}
+\end{figure}
+
+\subsection{データ追加}
+一覧表示で追加リンクを選択することで，以下のようなデータ追加画面に移動する．
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=12cm]{fig_webpro/gold_create.png}
+    \caption{データ追加画面}
+    \label{gold_create}
+\end{figure}
+
+\begin{enumerate}
+    \item 入力欄：追加したいキャラの詳細を入力
+    \item 送信ボタン：押すことで内容を決定して追加する
+    \item キャンセル（一覧に戻る）：一覧ページへ戻る
+\end{enumerate}
+
+①に追加したいキャラの詳細を入力し，②の送信ボタンを押すことで追加することができる．また，
+③の一覧に戻るを押すことで一覧へ戻ることもできる．追加を決定すると一覧画面に移動し，
+図\ref{gold_full3}のように，最も後ろのIDの位置に追加される．なお，他の２つのシステムの
+場合でも，入力内容が変化するだけで操作に違いはない．
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=12cm]{fig_webpro/gold_full3.png}
+    \caption{データ追加後の一覧画面}
+    \label{gold_full3}
+\end{figure}
+
+
+\subsection{データ削除}
+詳細表示で削除リンクを押すことで，以下のようなデータ削除を行える削除画面に移動すること
+ができる．
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=12cm]{fig_webpro/gold_delete.png}
+    \caption{データ削除画面}
+    \label{gold_delete}
+\end{figure}
+
+\begin{enumerate}
+    \item 送信ボタン：押すことで内容を決定して追加する
+    \item キャンセル（詳細に戻る）：一覧ページへ戻る
+\end{enumerate}
+
+削除する情報を確認し，①の送信ボタンを押すことで，削除することができる．また，
+②のキャンセルを押すことで詳細表示に戻ることもできる．なお，他の２つのシステムの
+場合でも，表示される詳細内容が変わるだけで操作に違いはない．
+
+\subsection{データ編集}
+詳細画面で編集を押すことで，以下のようなデータの編集を行える編集画面に移動し，
+データの編集ができる．
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=12cm]{fig_webpro/gold_edit.png}
+    \caption{データ編集画面}
+    \label{gold_edit}
+\end{figure}
+
+\begin{enumerate}
+    \item 入力欄：編集したいキャラの詳細を入力
+    \item 送信ボタン：押すことで内容を決定して編集を決定する
+    \item キャラクター詳細に戻る：一覧ページへ戻る
+\end{enumerate}
+
+編集画面では，①に変種したい部分の内容を書き換え，②の送信ボタンを押すことで，編集を
+することができる．また，③のキャラクター詳細に戻るを押すことで詳細表示に戻ることもできる．
+例として，図\ref{gold_edit2}のようにキャラクター名を変更すると図\ref{gold_detail2}の
+ように詳細が変更できたことを確認できる．なお，他の２つのシステムの場合でも，編集内容が
+変わるだけで，操作に違いはない．
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=12cm]{fig_webpro/gold_edit2.png}
+    \caption{データ編集中の編集画面}
+    \label{gold_edit2}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=12cm]{fig_webpro/gold_detail2.png}
+    \caption{データ編集後の一覧画面}
+    \label{gold_detail2}
+\end{figure}
+
+\section{おわりに}
+本レポートでは３種類のシステムのうちのひとつのシステムを参照しながら，使用できる機能
+について利用者向けに説明を行った．利用者に簡単に理解ができるようにスクリーンショット
+を参照しながら説明を行うことで，直感的にシステムを理解することができる．
+\end{document}

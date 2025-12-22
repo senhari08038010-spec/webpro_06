@@ -1,0 +1,1062 @@
+\documentclass[uplatex,dvipdfmx]{jsarticle}
+
+\usepackage[uplatex,deluxe]{otf} % UTF
+\usepackage[noalphabet]{pxchfon} % must be after otf package
+\usepackage{stix2} %欧文＆数式フォント
+\usepackage[fleqn,tbtags]{mathtools} % 数式関連 (w/ amsmath)
+\usepackage{hira-stix} % ヒラギノフォント＆STIX2 フォント代替定義（Warning回避）
+\usepackage{float}%図のせいで文章がおかしくならないようにする
+\usepackage{url}%URL貼れるようになる
+\usepackage[dvipdfmx]{hyperref}%URLが改行されても大丈夫になる！
+
+\usepackage{verbatim}
+\usepackage{listings}
+% \usepackage{listings,japanese}
+\lstset{%プログラミングコードの書き方設定
+    basicstyle={\ttfamily},
+    identifierstyle={\small},
+    commentstyle={\smallitshape},
+    keywordstyle={\small\bfseries},
+    ndkeywordstyle={\small},
+    stringstyle={\small\ttfamily},
+    frame={tb},
+    breaklines=true,
+    columns=[l]{fullflexible},
+    numbers=left,
+    xrightmargin=0zw,
+    xleftmargin=3zw,
+    numberstyle={\scriptsize},
+    stepnumber=1,
+    numbersep=1zw,
+    lineskip=-0.5ex
+}
+\renewcommand{\lstlistingname}{プログラム}
+
+\newcounter{listingctr}
+\renewcommand{\thelistingctr}{\arabic{listingctr}}
+
+\newenvironment{listing}{
+    \refstepcounter{listingctr}
+}{}
+
+
+\begin{document}
+
+\title{基本的なデータ表示のWebアプリ開発}
+% \author{泉水悠斗}
+\date{\today}
+\maketitle
+
+
+\section{はじめに}
+本報告書では，一覧表示を中心としたwebアプリケーションである黄金裔システム，原神星５聖遺物
+システム，鳴潮限定星５所持キャラシステムの3種類開発した．
+各アプリケーションは，データを一覧形式で提示することで利用者が情報を直感的に把握できる構成
+とし，基本的な操作性と拡張性を考慮して設計している．本レポートでは、作成したWebアプリケー
+ションについて，利用者，管理者，開発者それぞれの視点から機能の説明を行う．
+
+\section{利用者向け}
+以下に利用者向けの説明を行う．
+\subsection{概要}
+利用者の視点から見た本Webアプリケーションは，登録された情報を一覧形式で閲覧・確認することを
+目的としたシステムである．利用者は，一覧表示されたデータを通して全体の状況を把握でき，
+必要に応じて個々の情報にアクセスすることが可能である．直感的な操作性を重視し，専門的な知識を
+必要とせずに利用できる点が特徴である．
+% \begin{figure}[H]
+%     \centering
+%     \caption{作成したシステム名}
+%     \begin{tabular}{|c|c|}
+%         \hline
+%         システム名 & 概要  \\ \hline
+%         黄金裔システム & 崩壊スターレイルのキャラである黄金裔についてのシステム  \\ \hline
+%         星5聖遺物システム & 原神にある星5聖遺物についてのシステム  \\ \hline
+%         鳴潮所持星5キャラシステム & 鳴潮の所持星5キャラについてのシステム  \\ \hline
+%     \end{tabular}
+%     \label{tab:system}
+% \end{figure}
+
+\subsection{使用できる機能}
+使用できる機能として，一覧表示，詳細表示，データ追加，データ削除，データ編集がある．これらの
+操作は統一しているため，３つのシステムにの操作に大きな差はない．
+
+\subsection{システムの使い方について}
+例として，黄金裔システムの使用方法を以下に示す．
+
+\subsubsection{起動画面と一覧表示}
+起動と同時に以下のような一覧表示が表示される．この画面では黄金裔のID，因子個体識別コード，
+キャラ名が確認できる．
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=12cm]{fig_webpro/gold_full.png}
+    \label{gold_full}
+    \caption{一覧表示}
+\end{figure}
+
+また，このページで可能な操作は以下の2つである．
+
+\begin{enumerate}
+    \item キャラ名：選択することによる詳細表示への移動
+    \item 追加リンク：選択することによるデータ追加画面への移動
+\end{enumerate}
+
+なお，原神星５聖遺物システムでは図\ref{holy_full}のようにID，聖遺物名，２セット効果が一覧として
+表示され，鳴潮所持星５キャラシステムでは図\ref{character_full}のようにIDとキャラ名が一覧として
+表示される．
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=12cm]{fig_webpro/holy_full.png}
+    \caption{原神星５聖遺物システムの一覧表示}
+    \label{holy_full}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=12cm]{fig_webpro/character_full.png}
+    \caption{鳴潮所持星５キャラシステムの一覧表示}
+    \label{character_full}
+\end{figure}
+
+\subsubsection{詳細表示}
+一覧表示で任意のキャラ名を選択した後，以下のような詳細表示画面に移動する．
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=12cm]{fig_webpro/gold_detail.png}
+    \caption{詳細表示}
+    \label{gold_detail}
+\end{figure}
+
+このページでは，因子個体識別コード，キャラ名，神権が確認でき，可能な操作は以下の３つである．
+
+\begin{enumerate}
+    \item 黄金裔一覧に戻る：一覧ページへ戻る
+    \item 編集：編集画面への移動
+    \item 削除：削除画面への移動
+\end{enumerate}
+
+なお，原神星５聖遺物システムでは，図\ref{holy_detail}のように聖遺物名，２セット効果，５セット効果，
+おすすめキャラクターが表示され，鳴潮限定星5所持キャラについてのシステムでは，図\ref{character_detail}のように
+キャラ名，武器名，凸数，音骸セット，HP，攻撃力，防御力，クリティカル（\%），クリダメ（\%），
+共鳴効率（\%），ダメバフ（有効なバフ）（\%），通常攻撃lv，スキルlv，共鳴回路lv，
+共鳴解放lv，変奏スキルlvを表示する．
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=12cm]{fig_webpro/holy_detail.png}
+    \caption{原神星５聖遺物システムの詳細表示}
+    \label{holy_detail}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=12cm]{fig_webpro/character_detail.png}
+    \caption{鳴潮限定星５所持キャラシステムの詳細表示}
+    \label{character_detail}
+\end{figure}
+
+\subsubsection{データ追加}
+一覧表示で追加リンクを選択することで，以下のようなデータ追加画面に移動する．
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=12cm]{fig_webpro/gold_create.png}
+    \caption{データ追加画面}
+    \label{gold_create}
+\end{figure}
+
+\begin{enumerate}
+    \item 入力欄：追加したいキャラの詳細を入力
+    \item 送信ボタン：押すことで内容を決定して追加する
+    \item キャンセル（一覧に戻る）：一覧ページへ戻る
+\end{enumerate}
+
+①に追加したいキャラの詳細を入力し，②の送信ボタンを押すことで追加することができる．また，
+③の一覧に戻るを押すことで一覧へ戻ることもできる．追加を決定すると一覧画面に移動し，
+図\ref{gold_full3}のように，最も後ろのIDの位置に追加される．なお，他の２つのシステムの
+場合でも，入力内容が変化するだけで操作に違いはない．
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=12cm]{fig_webpro/gold_full3.png}
+    \caption{データ追加後の一覧画面}
+    \label{gold_full3}
+\end{figure}
+
+
+\subsubsection{データ削除}
+詳細表示で削除リンクを押すことで，以下のようなデータ削除を行える削除画面に移動すること
+ができる．
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=12cm]{fig_webpro/gold_delete.png}
+    \caption{データ削除画面}
+    \label{gold_delete}
+\end{figure}
+
+\begin{enumerate}
+    \item 送信ボタン：押すことで内容を決定して追加する
+    \item キャンセル（詳細に戻る）：一覧ページへ戻る
+\end{enumerate}
+
+削除する情報を確認し，①の送信ボタンを押すことで，削除することができる．また，
+②のキャンセルを押すことで詳細表示に戻ることもできる．なお，他の２つのシステムの
+場合でも，表示される詳細内容が変わるだけで操作に違いはない．
+
+\subsubsection{データ編集}
+詳細画面で編集を押すことで，以下のようなデータの編集を行える編集画面に移動し，
+データの編集ができる．
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=12cm]{fig_webpro/gold_edit.png}
+    \caption{データ編集画面}
+    \label{gold_edit}
+\end{figure}
+
+\begin{enumerate}
+    \item 入力欄：編集したいキャラの詳細を入力
+    \item 送信ボタン：押すことで内容を決定して編集を決定する
+    \item キャラクター詳細に戻る：一覧ページへ戻る
+\end{enumerate}
+
+編集画面では，①に変種したい部分の内容を書き換え，②の送信ボタンを押すことで，編集を
+することができる．また，③のキャラクター詳細に戻るを押すことで詳細表示に戻ることもできる．
+例として，図\ref{gold_edit2}のようにキャラクター名を変更すると図\ref{gold_detail2}の
+ように詳細が変更できたことを確認できる．なお，他の２つのシステムの場合でも，編集内容が
+変わるだけで，操作に違いはない．
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=12cm]{fig_webpro/gold_edit2.png}
+    \caption{データ編集中の編集画面}
+    \label{gold_edit2}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=12cm]{fig_webpro/gold_detail2.png}
+    \caption{データ編集後の一覧画面}
+    \label{gold_detail2}
+\end{figure}
+
+\section{管理者向け}
+以下に管理者向けの説明を行う
+
+\subsection{サーバーの起動方法}
+サーバー(app5.js)の起動方法について説明する．
+
+% \begin{enumerate}
+%     \item ターミナルでJavaScript ファイルがあるディレクトリに移動する．
+%     （例：cd documents/1\_2S/webpro/webpro\_06）
+%     \item app5.jsを次のように実行する．\\
+%     \$ node app5.js
+% \end{enumerate}
+初めに，ターミナルでJavaScript ファイルがあるディレクトリに移動し，
+そこでプログラム\ref{server}を実行する．
+\begin{lstlisting}[caption=サーバーの起動する際のプログラム,label=server]
+    $ node app5.js
+\end{lstlisting}
+実行した際に Example app listening on port 8080! のように表示されればサーバーの
+起動が成功している．
+
+\subsection{サーバーへの接続方法}
+\subsubsection{telnetを使用して接続する方法}
+telnetを使用して接続する方法について説明する．初めに，サーバーにアクセスするのに
+コマンド\ref{tlnet}のプログラムを実行する
+
+\begin{lstlisting}[caption=サーバーにアクセスする際のプログラム,label=telnet]
+    $ telnet localhost 8080 
+\end{lstlisting}
+
+次に，プログラム\ref{reqest}を実行しサーバーへのリクエストを行う．なお，１行目を書き終えた
+際に一回，2行目を書き終えた際に2回Enterキーを押す必要がある．
+
+\begin{lstlisting}[caption=サーバーにリクエストをする際のプログラム,label=reqest]
+    GET /gold HTTP/1.1
+    HOST: localhost
+\end{lstlisting}
+
+\subsubsection{googleなどでの接続}
+googleなどを使用した接続方法について説明する．URLで以下のように実行することで
+一覧ページにアクセスすることができる．
+
+\begin{lstlisting}[caption=googleなどでサーバーにリクエストをする際のプログラム,label=google]
+    http://localhost:8080/holy
+\end{lstlisting}
+
+% \begin{enumerate}
+%     \item サーバーにアクセスするのに次のコマンドを実行する\\
+%     \$ telnet localhost 8080 
+%     \item アクセスしたら，リクエストを次のコマンドを実行して行う\\
+%     GET /gold HTTP/1.1
+%     \item ２.を実行した後にホスト名を指定する\\
+%     HOST: localhost
+% \end{enumerate}
+
+\subsection{起動できない場合}
+サーバーを起動しないまま，クライアント側から接続をしようとすると，接続できない状況
+になることがある．
+\subsection{終了方法}
+終了する際は，サーバーを動かしているターミナルで Control + c と入力することで
+サーバーを終了することができる．
+
+\section{開発者向け}
+\subsection{概要}
+開発者の視点から見た本Webアプリケーションは，一覧表示を中心としたWebシステムの設計および
+実装方法を検証するための開発対象である．ページ構造，ページ遷移，HTTPメソッドとリソース設計
+を明確に分離することで，保守性と拡張性を考慮した構成としている．今後の機能追加や仕様変更を
+容易に行える点を設計上の特徴とする．作成した３種類のシステムについて説明を行う．
+%#############################################################################
+\subsection{黄金裔システムについて}
+\subsubsection{黄金裔システムのデータ構造について}
+黄金裔システムのデータ構造を表\ref{gold_data}に示す．この配列（ougonei）の形は
+プログラム\ref{gold_data2}のようになっている．
+
+\begin{table}[h]
+\centering
+\caption{黄金裔一覧システムのデータ構造}
+\label{gold_data}
+\begin{tabular}{|c|c|l|}
+\hline
+項目名 & 型 & 内容 \\ \hline
+id     & 数値     & キャラID \\ \hline
+code   & 文字列   & キャラクターデータ名 \\ \hline
+name   & 文字列   & キャラクター名 \\ \hline
+spark  & 文字列   & 背負った火種 \\ \hline
+divine & 文字列   & 担う神権 \\ \hline
+\end{tabular}
+\end{table}
+
+\begin{lstlisting}[caption=配列の形,label=gold_data2]
+    { id:1, code:"KaLos618", name:"アグライア", spark:"浪漫", divine:"黄金の繭――モネータ"},
+\end{lstlisting}
+
+\subsubsection{黄金裔システムの遷移図}
+黄金裔システムのページ遷移図を表\ref{senizu_gold}に示す．
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=15cm]{fig_webpro/senizu2_gold.png}
+    \caption{黄金裔システムの遷移図}
+    \label{senizu_gold}
+\end{figure}
+
+本システムでは，一覧表示ページを起点として，各操作（詳細表示・新規登録・編集・削除）を
+ページ内のリンクやボタンをクリックすることで遷移する構成となっている．
+以下に，主なページ遷移の流れを説明する．
+まず，利用者が 一覧表示ページ（/gold） に
+アクセスすると，登録されているデータのうちの，ID，因子個体の識別コード，キャラ名
+が表示される．この一覧ページには，キャラ名がリンクとして配置されており，
+任意の項目をクリックすることで，そのデータの詳細表示ページ（/gold/{number}）へ遷移する．
+詳細表示ページでは，選択したデータの内容（因子個体の識別コード，キャラ名，火種，神権）が
+表示されるとともに，「編集」，「削除」および「一覧に戻る」といった操作用のリンクが設置されている．
+編集リンクをクリックした場合は，編集画面（/gold/edit/{number}） に遷移し，
+削除リンクをクリックした場合は，削除確認画面（/gold\_delete/{number}） に遷移する．
+一覧に戻るリンクをクリックした場合は，一覧ページ（/gold）に遷移する．
+編集画面では，既存データの内容が入力フォームに反映された状態で表示される．
+利用者が内容を変更し，「更新」ボタンを押下すると，
+更新の実行（/gold/update/{number}） が行われ，処理完了後は詳細表示ページへ戻る．
+なお，一覧に戻るリンクも存在する．
+削除確認画面では，削除対象のデータ内容が再度表示され，
+利用者が削除を確定すると，削除の実行（/gold/delete/{number}） が行われる．
+削除せずに戻る場合は，キャンセル（一覧に戻る）リンク（/gold）を押下することで一覧表示ページに遷移する．
+削除処理完了後は，自動的に一覧表示ページへ遷移し，最新のデータ状態が表示される．
+また，一覧表示ページには「新規登録」へのリンクが設置されており，
+これをクリックすることで 新規登録画面（/gold/create） に遷移する．
+新規登録画面で必要事項を入力し，登録ボタンを押下すると，
+登録の実行（/gold\_create） が行われ，登録完了後は一覧表示ページへ戻る．
+ここでも新規登録をしない場合は一覧に戻るリンクを押下することで一覧表示ページに遷移する．
+このように，本システムでは直感的なページ遷移を実現している．
+
+\subsection{黄金裔システムのHTTPメソッドとリソース名一覧}
+本説では，HTTPメソッドとリソース名一覧について説明していく．黄金裔システムの
+HTTPメソッドとリソース名一覧を表\ref{method}に示す．
+
+\begin{figure}[H]
+\centering
+\caption{HTTPメソッドとリソース名一覧（黄金裔システム）}
+\label{method}
+\begin{tabular}{|c|l|l|}
+\hline
+HTTPメソッド & リソース名 & 内容 \\ \hline
+GET  & /gold                 & 一覧の取得 \\ \hline
+GET  & /gold/{number}        & 指定した詳細を取得 \\ \hline
+GET  & /gold/create          & 新規作成画面を表示 \\ \hline
+POST & /gold\_create         & 新規登録の実行 \\ \hline
+GET  & /gold/edit/{number}   & 編集画面の表示 \\ \hline
+POST & /gold/update/{number} & 更新の実行 \\ \hline
+GET  & /gold\_delete/{number}& 削除確認画面の表示 \\ \hline
+GET  & /gold/delete/{number} & 削除の実行 \\ \hline
+\end{tabular}
+\end{figure}
+
+\subsection{黄金裔システムのリソース名ごとの機能の詳細}
+\subsubsection{一覧の取得（/gold）について}
+一覧の取得（\texttt{/gold}）の機能の詳細についてプログラム\ref{gold}を参照しながら
+説明を行う．
+\begin{lstlisting}[caption=一覧の取得（/gold）,label=gold]
+    app.get("/gold", (req, res) => {
+        res.render('gold', {data: ougonei} );
+    });
+\end{lstlisting}
+プログラム\ref{gold}の１行目から，メソッドがGETであることがわかる．２行目から，
+ougonei 配列（データ構造）を取得し，ejsテンプレート gold.ejs にデータを渡す．
+これにより，一覧ページが出力される．
+
+% /goldは，HTTPメソッドがGETの黄金裔データの一覧を表示する機能を持つ．入力はなく，
+% 処理内容は，以下に示す．
+% \begin{enumerate}
+%     \item 黄金裔データ配列 ougonei を取得する
+%     \item 取得した全データを一覧表示用テンプレートに渡す
+% \end{enumerate}
+% これにより，黄金裔一覧表示（gold.ejs）を呼び出す．
+
+
+\subsubsection{指定した詳細を取得（/gold/{number}）について}
+指定した詳細を取得（/gold/{number}）の機能の詳細についてプログラム\ref{gold_number}を参照しながら説明を
+行う．
+
+\begin{lstlisting}[caption=指定した詳細を取得（/gold/{number}）,label=gold_number]
+    app.get("/gold/:number", (req, res) => {
+        const number = req.params.number;
+        const detail = ougonei[ number ];
+        res.render('gold_detail', {id: number, data: detail} );
+    });
+\end{lstlisting}
+
+プログラム\ref{gold_number}の１行目から，メソッドがGET，パスパラメーターの":number"
+があることがわかる．２行目でURLから指定された番号を取得し，３行目で受け取った番号
+を元に配列 ougonei から対応する要素を取得する．４行目で取得したデータを詳細表示用テンプ
+レートに渡すことで，対象となるデータの詳細ページを出力する．
+
+% /gold/{number}は，HTTPメソッドがGETの指定された黄金裔の詳細を表示する機能を持つ．
+% 入力を表\ref{detail}に示す．
+
+% \begin{figure}[h]
+%     \centering
+%     \caption{入力パラメータ（/gold/{number}）}
+%     \label{detail}
+%     \begin{tabular}{|l|l|l|}
+%         \hline
+%         名称 & 種別 & 内容 \\ \hline
+%         number & パスパラメータ & 表示対象の黄金裔番号 \\ \hline
+%     \end{tabular}
+% \end{figure}
+
+% また，処理内容は以下に示す．
+
+% \begin{enumerate}
+%     \item パスパラメータ number を取得する
+%     \item 対応する黄金裔データを配列から取得する
+%     \item 詳細表示用テンプレートにデータを渡す
+% \end{enumerate}
+% これにより，黄金裔詳細画面（gold\_detail.ejs）を呼び出す．
+
+% \subsubsection{新規作成（/gold\_create）について}
+% /gold\_createは，HTTPメソッドがPOSTの 
+
+% プログラムを参照しながら説明する方がいいかも!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+\subsubsection{新規作成画面を表示（/gold/create）について}
+新規作成画面を表示（/gold/create）の機能の詳細についてプログラム\ref{gold_create1}を
+参照しながら説明を行う．
+
+\begin{lstlisting}[caption=新規作成画面を表示（/gold/create）,label=gold_create1]
+    app.get("/gold/create", (req, res) => {
+        res.render('gold_create');
+    });
+\end{lstlisting}
+プログラム\ref{gold_create1}では，１行目でGETメソッドによる/gold/createへのアクセスを入力
+として受け取り，サーバ側では処理を行わず，２行目で入力フォームを含むページをそのまま出力する．
+
+\subsubsection{新規登録の実行（/gold\_create）について}
+新規登録の実行（/gold\_create）の機能の詳細についてプログラム\ref{gold_create2}を
+参照しながら説明を行う．
+
+\begin{lstlisting}[caption=新規登録の実行（/gold\_create）,label=gold_create2]
+    app.post("/gold_create", (req, res) => {
+        const id = ougonei.length + 1;
+        const code = req.body.code;
+        const name = req.body.name;
+        const spark = req.body.spark;
+        const divine = req.body.divine;
+        ougonei.push( { id: id, code: code, name: name, spark: spark, divine: divine } );
+        console.log( ougonei );
+        res.render('gold', {data: ougonei} );
+    });
+\end{lstlisting}
+プログラム\ref{gold_create2}では１行目でPOSTメソッドによって送信されたフォーム入力を受け取り，
+２行目で，新規IDの作成，3〜６行目で入力された内容を受け取り，７行目で配列に格納することで，
+新規データとして配列ougoneiに追加する処理を行う．なお，８行目は動作確認用のデバック出力である．
+データ追加後は，更新されたデータ一覧を一覧表示用ページとして出力し，利用者が登録結果を即座に確認
+できるようにしている．
+
+\subsubsection{編集画面の表示（/gold/edit/{number}）について}
+編集画面の表示（/gold/edit/{number}）の機能の詳細についてプログラム\ref{gold_edit1}を
+参照しながら説明を行う．
+
+\begin{lstlisting}[caption=編集画面の表示（/gold/edit/{number}）,label=gold_edit1]
+    app.get("/gold/edit/:number", (req, res) => {
+        const number = req.params.number;
+        const detail = ougonei[ number ];
+        res.render('gold_edit', {id: number, data: detail} );
+    });
+\end{lstlisting}
+
+プログラム\ref{gold_edit1}では，既存データを編集するための入力画面を表示することを目的としている．
+１行目で，GETメソッドによる/gold/edit/:numberへのアクセスを入力として受け取り，
+２，３行目で指定された番号に対応するデータを取得した上で，編集用フォームを含むページを出力する．
+
+\subsubsection{更新の実行（/gold/update/{number}）について}
+更新の実行（/gold/update/{number}）の機能の詳細についてプログラム\ref{gold_edit2}を
+参照しながら説明を行う．
+
+\begin{lstlisting}[caption=更新の実行（/gold/update/{number}）,label=gold_edit2]
+    app.post("/gold/update/:number", (req, res) => {
+        const number = req.params.number;
+        ougonei[req.params.number].code = req.body.code;
+        ougonei[req.params.number].name = req.body.name;
+        ougonei[req.params.number].spark = req.body.spark;
+        ougonei[req.params.number].divine = req.body.divine;
+        console.log( ougonei );
+        res.redirect(`/gold/${number}`);
+    });
+\end{lstlisting}
+
+プログラム\ref{gold_edit2}では，POSTメソッドによって送信された編集内容を受け取り，
+パスパラメータで指定されたデータを更新する処理を行う．２行目で，更新する対象のデータ番号
+を受け取り，3〜６行目で入力された更新内容を受け取り，配列に新しく格納する．更新完了後は
+8行目で詳細表示へリダイレクトすることで，利用者が変更内容を即座に確認できるようにしている．
+なお，７行目は，動作確認用のデバック出力である．
+
+\subsubsection{削除確認画面の表示（/gold\_delete/{number}）について}
+削除確認画面の表示（/gold\_delete/{number}）の機能の詳細についてプログラム\ref{gold_delete1}を
+参照しながら説明を行う．
+
+\begin{lstlisting}[caption=削除確認画面の表示（/gold\_delete/{number}）,label=gold_delete1]
+    app.get("/gold_delete/:number", (req, res) => {
+        const number = req.params.number;
+        const detail = ougonei[ number ];
+        res.render('gold_delete', {id: number, data: detail} );
+    });
+\end{lstlisting}
+
+プログラム\ref{gold_delete}では，データ削除を実行する前に内容を確認するための画面表示する機能
+をを持つ．１行目では，GETメソッドによる/gold\_delete/:numberへのアクセスを入力として受け取り，
+２，３行目で指定された番号に対応するデータを取得した上で，４行目で，削除確認用ページを出力する．
+
+\subsubsection{削除の実行（/gold/delete/{number}）について}
+削除の実行（/gold/delete/{number}）の機能の詳細についてプログラム\ref{gold_delete2}を
+参照しながら説明を行う．
+
+\begin{lstlisting}[caption=削除の実行（/gold/delete/{number}）,label=gold_delete2]
+    app.get("/gold/delete/:number", (req, res) => {
+        ougonei.splice( req.params.number, 1 );
+        res.redirect('/gold' );
+    });
+\end{lstlisting}
+
+プログラム\ref{gold_delete2}では，パスパラメータで指定されたデータを配列から削除する処理を行う．
+２行目で，受け取った番号の配列の内容を削除する．削除完了後は一覧表示ページへリダイレクトすることで，
+最新のデータ状態を利用者に提示する．
+
+%############################################################################################
+
+\subsection{原神星５聖遺物システム}
+\subsubsection{原神星５聖遺物システムのデータ構造について}
+原神星5聖遺物システムのデータ構造を表\ref{holy_data}に示す．
+この配列（relic）の形はプログラム\ref{holy_data2}
+のようになっている．
+
+\begin{table}[h]
+\centering
+\caption{原神星５聖遺物システムのデータ構造}
+\label{holy_data}
+\begin{tabular}{|c|c|l|}
+\hline
+項目名 & 型 & 内容 \\ \hline
+id        & 数値   & 聖遺物ID \\ \hline
+name      & 文字列 & 聖遺物名 \\ \hline
+two\_set   & 文字列 & 2セット効果 \\ \hline
+five\_set  & 文字列 & 5セット効果 \\ \hline
+chara     & 文字列 & おすすめキャラ \\ \hline
+\end{tabular}
+\end{table}
+
+\begin{lstlisting}[caption=配列の形,label=holy_data2]
+    { id:1, name:"剣闘士のフィナーレ", two_set:"攻撃力+18%", five_set:"該当聖遺物セットを装備したキャラが片手剣、両手剣、長柄武器キャラの場合、通常攻撃ダメージ+35%", chara:"神里綾人，アルレッキーノ，セノ，ノエル，クロリンデ"},
+\end{lstlisting}
+
+\subsubsection{原神星５聖遺物システムの遷移図}
+原神星５聖遺物システムのページ遷移図を表\ref{senizu_holy}に示す．
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=15cm]{fig_webpro/senizu2_holy.png}
+    \caption{鳴潮限定星５所持キャラシステムの遷移図}
+    \label{senizu_holy}
+\end{figure}
+
+本システムでは，一覧表示ページを起点として，各操作（詳細表示・新規登録・編集・削除）を
+ページ内のリンクやボタンをクリックすることで遷移する構成となっている．
+以下に，主なページ遷移の流れを説明する．
+まず，利用者が 一覧表示ページ（/holy） に
+アクセスすると，登録されているデータのうちの，ID，聖遺物名，２セット効果
+が表示される．この一覧ページには，聖遺物名がリンクとして配置されており，
+任意の項目をクリックすることで，そのデータの詳細表示ページ（/holy/{number}）へ遷移する．
+詳細表示ページでは，選択したデータの内容（聖遺物名，２セット効果，５セット効果）が
+表示されるとともに，「編集」，「削除」および「一覧に戻る」といった操作用のリンクが設置されている．
+編集リンクをクリックした場合は，編集画面（/holy/edit/{number}） に遷移し，
+削除リンクをクリックした場合は，削除確認画面（/holy\_delete/{number}） に遷移する．
+一覧に戻るリンクをクリックした場合は，一覧ページ（/holy）に遷移する．
+編集画面では，既存データの内容が入力フォームに反映された状態で表示される．
+利用者が内容を変更し，「更新」ボタンを押下すると，
+更新の実行（/holy/update/{number}） が行われ，処理完了後は詳細表示ページへ戻る．
+なお，一覧に戻るリンクも存在する．
+削除確認画面では，削除対象のデータ内容が再度表示され，
+利用者が削除を確定すると，削除の実行（/holy/delete/{number}） が行われる．
+削除せずに戻る場合は，キャンセル（一覧に戻る）リンク（/holy）を押下することで一覧表示ページに遷移する．
+削除処理完了後は，自動的に一覧表示ページへ遷移し，最新のデータ状態が表示される．
+また，一覧表示ページには「新規登録」へのリンクが設置されており，
+これをクリックすることで 新規登録画面（/holy/create） に遷移する．
+新規登録画面で必要事項を入力し，登録ボタンを押下すると，
+登録の実行（/holy\_create） が行われ，登録完了後は一覧表示ページへ戻る．
+ここでも新規登録をしない場合は一覧に戻るリンクを押下することで一覧表示ページに遷移する．
+このように，本システムでは直感的なページ遷移を実現している．
+
+\subsection{黄金裔システムのHTTPメソッドとリソース名一覧}
+本説では，HTTPメソッドとリソース名一覧について説明していく．黄金裔システムの
+HTTPメソッドとリソース名一覧を表\ref{method2}に示す．
+
+\begin{figure}[H]
+\centering
+\caption{HTTPメソッドとリソース名一覧（黄金裔システム）}
+\label{method2}
+\begin{tabular}{|c|l|l|}
+\hline
+HTTPメソッド & リソース名 & 内容 \\ \hline
+GET  & /holy                 & 一覧の取得 \\ \hline
+GET  & /holy/{number}        & 指定した詳細を取得 \\ \hline
+GET  & /holy/create          & 新規作成画面を表示 \\ \hline
+POST & /holy\_create         & 新規登録の実行 \\ \hline
+GET  & /holy/edit/{number}   & 編集画面の表示 \\ \hline
+POST & /holy/update/{number} & 更新の実行 \\ \hline
+GET  & /holy\_delete/{number}& 削除確認画面の表示 \\ \hline
+GET  & /holy/delete/{number} & 削除の実行 \\ \hline
+\end{tabular}
+\end{figure}
+
+\subsection{原神星５聖遺物システムのリソース名ごとの機能の詳細}
+以下にリソース名ごとの機能の詳細を示す．
+
+\subsubsection{一覧の取得（/holy）について}
+一覧の取得（\texttt{/holy}）の機能の詳細についてプログラム\ref{holy}を参照しながら
+説明を行う．
+\begin{lstlisting}[caption=一覧の取得（/holy）,label=holy]
+app.get("/holy", (req, res) => {
+    res.render('holy', {data: relic} );
+});
+\end{lstlisting}
+
+プログラム\ref{holy}の１行目から，メソッドがGETであることがわかる．２行目から，
+relic 配列（データ構造）を取得し，ejsテンプレート holy.ejs にデータを渡す．
+これにより，一覧ページが出力される．
+
+\subsubsection{指定した詳細を取得（/holy/{number}）について}
+指定した詳細を取得（/holy/{number}）の機能の詳細についてプログラム\ref{holy_number}を参照しながら説明を
+行う．
+
+\begin{lstlisting}[caption=指定した詳細を取得（/holy/{number}）,label=holy_number]
+app.get("/holy/:number", (req, res) => {
+    const number = req.params.number;
+    const detail = relic[ number ];
+    res.render('holy_detail', {id: number, data: detail} );
+});
+\end{lstlisting}
+
+
+プログラム\ref{holy_number}の１行目から，メソッドがGET，パスパラメーターの":number"
+があることがわかる．２行目でURLから指定された番号を取得し，３行目で受け取った番号
+を元に配列 relic から対応する要素を取得する．４行目で取得したデータを詳細表示用テンプ
+レートに渡すことで，対象となるデータの詳細ページを出力する．
+
+\subsubsection{新規作成画面を表示（/holy/create）について}
+新規作成画面を表示（/holy/create）の機能の詳細についてプログラム\ref{holy_create1}を
+参照しながら説明を行う．
+
+\begin{lstlisting}[caption=新規作成画面を表示（/holy/create）,label=holy_create1]
+app.get("/holy/create", (req, res) => {
+    res.render('holy_create');
+});
+\end{lstlisting}
+
+プログラム\ref{holy_create1}では，１行目でGETメソッドによる/holy/createへのアクセスを入力
+として受け取り，サーバ側では処理を行わず，２行目で入力フォームを含むページをそのまま出力する．
+
+\subsubsection{新規登録の実行（/holy\_create）について}
+新規登録の実行（/holy\_create）の機能の詳細についてプログラム\ref{holy_create2}を
+参照しながら説明を行う．
+
+\begin{lstlisting}[caption=新規登録の実行（/holy\_create）,label=holy_create2]
+app.post("/holy_create", (req, res) => {
+    const id = relic.length + 1;
+    const name = req.body.name;
+    const two_set = req.body.two_set;
+    const five_set = req.body.five_set;
+    const chara = req.body.chara;
+    relic.push( { id: id, name: name, two_set: two_set, five_set: five_set, chara: chara } );
+    console.log( relic );
+    res.render('holy', {data: relic} );
+});
+\end{lstlisting}
+
+プログラム\ref{holy_create2}では１行目でPOSTメソッドによって送信されたフォーム入力を受け取り，
+２行目で，新規IDの作成，3〜６行目で入力された内容を受け取り，７行目で配列に格納することで，
+新規データとして配列relicに追加する処理を行う．なお，８行目は動作確認用のデバック出力である．
+データ追加後は，更新されたデータ一覧を一覧表示用ページとして出力し，利用者が登録結果を即座に確認
+できるようにしている．
+
+\subsubsection{編集画面の表示（/holy/edit/{number}）について}
+編集画面の表示（/holy/edit/{number}）の機能の詳細についてプログラム\ref{holy_edit1}を
+参照しながら説明を行う．
+
+\begin{lstlisting}[caption=編集画面の表示（/holy/edit/{number}）,label=holy_edit1]
+app.get("/holy/edit/:number", (req, res) => {
+    const number = req.params.number;
+    const detail = relic[ number ];
+    res.render('holy_edit', {id: number, data: detail} );
+});
+\end{lstlisting}
+
+プログラム\ref{holy_edit1}では，既存データを編集するための入力画面を表示することを目的としている．
+１行目で，GETメソッドによる/holy/edit/:numberへのアクセスを入力として受け取り，
+２，３行目で指定された番号に対応するデータを取得した上で，編集用フォームを含むページを出力する．
+
+\subsubsection{更新の実行（/holy/update/{number}）について}
+更新の実行（/holy/update/{number}）の機能の詳細についてプログラム\ref{holy_edit2}を
+参照しながら説明を行う．
+
+\begin{lstlisting}[caption=更新の実行（/holy/update/{number}）,label=holy_edit2]
+app.post("/holy/update/:number", (req, res) => {
+    const number = req.params.number;
+    relic[req.params.number].name = req.body.name;
+    relic[req.params.number].two_set = req.body.two_set;
+    relic[req.params.number].five_set = req.body.five_set;
+    relic[req.params.number].chara = req.body.chara;
+    console.log( relic );
+    res.redirect(`/holy/${number}`);
+});
+\end{lstlisting}
+
+プログラム\ref{holy_edit2}では，POSTメソッドによって送信された編集内容を受け取り，
+パスパラメータで指定されたデータを更新する処理を行う．２行目で，更新する対象のデータ番号
+を受け取り，3〜６行目で入力された更新内容を受け取り，配列に新しく格納する．更新完了後は
+8行目で詳細表示へリダイレクトすることで，利用者が変更内容を即座に確認できるようにしている．
+なお，７行目は，動作確認用のデバック出力である．
+
+\subsubsection{削除確認画面の表示（/holy\_delete/{number}）について}
+削除確認画面の表示（/holy\_delete/{number}）の機能の詳細についてプログラム\ref{holy_delete1}を
+参照しながら説明を行う．
+
+\begin{lstlisting}[caption=削除確認画面の表示（/holy\_delete/{number}）,label=holy_delete1]
+app.get("/holy_delete/:number", (req, res) => {
+    const number = req.params.number;
+    const detail = relic[ number ];
+    res.render('holy_delete', {id: number, data: detail} );
+});
+\end{lstlisting}
+
+プログラム\ref{holy_delete1}では，データ削除を実行する前に内容を確認するための画面表示する機能
+をを持つ．１行目では，GETメソッドによる/holy\_delete/:numberへのアクセスを入力として受け取り，
+２，３行目で指定された番号に対応するデータを取得した上で，４行目で，削除確認用ページを出力する．
+
+\subsubsection{削除の実行（/holy/delete/{number}）について}
+削除の実行（/holy/delete/{number}）の機能の詳細についてプログラム\ref{holy_delete2}を
+参照しながら説明を行う．
+
+\begin{lstlisting}[caption=削除の実行（/holy/delete/{number}）,label=holy_delete2]
+app.get("/holy/delete/:number", (req, res) => {
+    relic.splice( req.params.number, 1 );
+    res.redirect('/holy' );
+});
+\end{lstlisting}
+
+
+プログラム\ref{holy_delete2}では，パスパラメータで指定されたデータを配列から削除する処理を行う．
+２行目で，受け取った番号の配列の内容を削除する．削除完了後は一覧表示ページへリダイレクトすることで，
+最新のデータ状態を利用者に提示する．
+
+%#################################################################################
+
+\subsection{鳴潮限定星５所持キャラシステムについて}
+\subsubsection{鳴潮限定所持星5キャラシステムのデータ構造}
+鳴潮限定所持星5キャラシステムのデータ構造を表\ref{cha_data}に示す．
+この配列（states）の形はプログラム\ref{cha_data2}
+のようになっている．
+
+\begin{table}[H]
+\centering
+\caption{鳴潮限定星5所持キャラのデータ構造}
+\label{cha_data}
+\begin{tabular}{|c|c|l|}
+\hline
+項目名 & 型 & 内容 \\ \hline
+id        & 数値   & キャラID \\ \hline
+name      & 文字列 & キャラ名 \\ \hline
+weapon    & 文字列 & 武器名 \\ \hline
+chain     & 数値   & 凸数 \\ \hline
+sound     & 文字列 & 装備音骸 \\ \hline
+H         & 数値   & HP \\ \hline
+A         & 数値   & 攻撃力 \\ \hline
+B         & 数値   & 防御力 \\ \hline
+C\_H      & 数値   & クリティカル率 \\ \hline
+C\_D      & 数値   & クリティカルダメージ \\ \hline
+charge    & 数値   & 共鳴効率 \\ \hline
+effect    & 数値   & 属性ダメージバフ \\ \hline
+usual     & 数値   & 通常攻撃倍率 \\ \hline
+skill     & 数値   & スキル倍率 \\ \hline
+circuit   & 数値   & 共鳴回路倍率 \\ \hline
+release   & 数値   & 共鳴解放倍率 \\ \hline
+variation & 数値   & 変奏倍率 \\ \hline
+\end{tabular}
+\end{table}
+
+\begin{lstlisting}[caption=配列の形,label=cha_data2]
+    let states =[
+        {id:1, name:"カルロッタ", weapon:"ラストダンス", chain:0, sound:"フロステッド・ハート", H:19687, A:2129, B:1257, C_H:70.1, C_D:297.0, charge:116.8, effect:60.0, usual:10, skill:6, circuit:10, release:10, variation:4},
+        :
+        :
+    ];
+\end{lstlisting}
+
+\subsubsection{鳴潮限定星５所持キャラシステムの遷移図}
+鳴潮限定所持星5キャラシステムのページ遷移図を表\ref{senizu_cha}に示す．
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=15cm]{fig_webpro/senizu2_cha.png}
+    \caption{鳴潮限定星５所持キャラシステムの遷移図}
+    \label{senizu_cha}
+\end{figure}
+
+本システムでは，一覧表示ページを起点として，各操作（詳細表示・新規登録・編集・削除）を
+ページ内のリンクやボタンをクリックすることで遷移する構成となっている．
+以下に，主なページ遷移の流れを説明する．
+まず，利用者が 一覧表示ページ（/character） に
+アクセスすると，登録されているデータのうちの，ID，キャラ名
+が表示される．この一覧ページには，聖遺物名がリンクとして配置されており，
+任意の項目をクリックすることで，そのデータの詳細表示ページ（/character/{number}）へ遷移する．
+詳細表示ページでは，選択したデータの内容（キャラ名，武器名，凸数，音骸セット，HP，攻撃力，防御力，
+クリティカル (\%)，クリダメ (\%)，共鳴効率 (\%)，ダメバフ(有効なバフ) (\%)，通常攻撃lv，スキルlv
+，共鳴回路lv，共鳴解放lv，変奏スキルlv）が
+表示されるとともに，「編集」，「削除」および「一覧に戻る」といった操作用のリンクが設置されている．
+編集リンクをクリックした場合は，編集画面（/character/edit/{number}） に遷移し，
+削除リンクをクリックした場合は，削除確認画面（/character\_delete/{number}） に遷移する．
+一覧に戻るリンクをクリックした場合は，一覧ページ（/character）に遷移する．
+編集画面では，既存データの内容が入力フォームに反映された状態で表示される．
+利用者が内容を変更し，「更新」ボタンを押下すると，
+更新の実行（/character/update/{number}） が行われ，処理完了後は詳細表示ページへ戻る．
+なお，一覧に戻るリンクも存在する．
+削除確認画面では，削除対象のデータ内容が再度表示され，
+利用者が削除を確定すると，削除の実行（/character/delete/{number}） が行われる．
+削除せずに戻る場合は，キャンセル（一覧に戻る）リンク（/character）を押下することで一覧表示ページに遷移する．
+削除処理完了後は，自動的に一覧表示ページへ遷移し，最新のデータ状態が表示される．
+また，一覧表示ページには「新規登録」へのリンクが設置されており，
+これをクリックすることで 新規登録画面（/character/create） に遷移する．
+新規登録画面で必要事項を入力し，登録ボタンを押下すると，
+登録の実行（/character\_create） が行われ，登録完了後は一覧表示ページへ戻る．
+ここでも新規登録をしない場合は一覧に戻るリンクを押下することで一覧表示ページに遷移する．
+このように，本システムでは直感的なページ遷移を実現している．
+
+
+\subsection{黄金裔システムのHTTPメソッドとリソース名一覧}
+本説では，HTTPメソッドとリソース名一覧について説明していく．黄金裔システムの
+HTTPメソッドとリソース名一覧を表\ref{method3}に示す．
+
+\begin{figure}[H]
+\centering
+\caption{HTTPメソッドとリソース名一覧（黄金裔システム）}
+\label{method3}
+\begin{tabular}{|c|l|l|}
+\hline
+HTTPメソッド & リソース名 & 内容 \\ \hline
+GET  & /character                 & 一覧の取得 \\ \hline
+GET  & /character/{number}        & 指定した詳細を取得 \\ \hline
+GET  & /character/create          & 新規作成画面を表示 \\ \hline
+POST & /character\_create         & 新規登録の実行 \\ \hline
+GET  & /character/edit/{number}   & 編集画面の表示 \\ \hline
+POST & /character/update/{number} & 更新の実行 \\ \hline
+GET  & /character\_delete/{number}& 削除確認画面の表示 \\ \hline
+GET  & /character/delete/{number} & 削除の実行 \\ \hline
+\end{tabular}
+\end{figure}
+
+\subsection{鳴潮限定星５所持キャラシステムのリソース名ごとの機能の詳細}
+以下にリソース名ごとの機能の詳細を示す．
+
+\subsubsection{一覧の取得（/character）について}
+一覧の取得（\texttt{/character}）の機能の詳細についてプログラム\ref{character}を参照しながら
+説明を行う．
+
+\begin{lstlisting}[caption=一覧の取得（/character）,label=character]
+app.get("/character", (req, res) => {
+    res.render('character', {data: states} );
+});
+\end{lstlisting}
+
+
+プログラム\ref{character}の１行目から，メソッドがGETであることがわかる．２行目から，
+states 配列（データ構造）を取得し，ejsテンプレート character.ejs にデータを渡す．
+これにより，一覧ページが出力される．
+
+\subsubsection{指定した詳細を取得（/character/{number}）について}
+指定した詳細を取得（/character/{number}）の機能の詳細についてプログラム\ref{character_number}を参照しながら説明を
+行う．
+
+\begin{lstlisting}[caption=指定した詳細を取得（/character/{number}）,label=character_number]
+app.get("/character/:number", (req, res) => {
+    const number = req.params.number;
+    const detail = states[ number ];
+    res.render('character_detail', {id: number, data: detail} );
+});
+\end{lstlisting}
+
+プログラム\ref{character_number}の１行目から，メソッドがGET，パスパラメーターの":number"
+があることがわかる．２行目でURLから指定された番号を取得し，３行目で受け取った番号
+を元に配列 states から対応する要素を取得する．４行目で取得したデータを詳細表示用テンプ
+レートに渡すことで，対象となるデータの詳細ページを出力する．
+
+\subsubsection{新規作成画面を表示（/character/create）について}
+新規作成画面を表示（/character/create）の機能の詳細についてプログラム\ref{character_create1}を
+参照しながら説明を行う．
+
+\begin{lstlisting}[caption=新規作成画面を表示（/character/create）,label=character_create1]
+app.get("/character/create", (req, res) => {
+    res.render('character_create');
+});
+\end{lstlisting}
+
+プログラム\ref{character_create1}では，１行目でGETメソッドによる/character/createへのアクセスを入力
+として受け取り，サーバ側では処理を行わず，２行目で入力フォームを含むページをそのまま出力する．
+
+\subsubsection{新規登録の実行（/character\_create）について}
+新規登録の実行（/character\_create）の機能の詳細についてプログラム\ref{character_create2}を
+参照しながら説明を行う．
+
+\begin{lstlisting}[caption=新規登録の実行（/character\_create）,label=character_create2]
+app.post("/character_create", (req, res) => {
+    const id = states.length + 1;
+    const name = req.body.name;
+    const weapon = req.body.weapon;
+    const chain = req.body.chain;
+    const sound = req.body.sound;
+    const H = req.body.H;
+    const A = req.body.A;
+    const B = req.body.B;
+    const C_H = req.body.C_H;
+    const C_D = req.body.C_D;
+    const charge = req.body.charge;
+    const effect = req.body.effect;
+    const usual = req.body.usual;
+    const skill = req.body.skill;
+    const circuit = req.body.circuit;
+    const release = req.body.release;
+    const variation = req.body.variation;
+    states.push({ ... });
+    console.log(states);
+    res.render('character', {data: states});
+});
+\end{lstlisting}
+
+
+プログラム\ref{holy_create2}では１行目でPOSTメソッドによって送信されたフォーム入力を受け取り，
+２行目で，新規IDの作成，3〜18行目で入力された内容を受け取り，19行目で配列に格納することで，
+新規データとして配列relicに追加する処理を行う．なお，20行目は動作確認用のデバック出力である．
+データ追加後は，21行目で更新されたデータ一覧を一覧表示用ページとして出力し，利用者が登録結果を即座に確認
+できるようにしている．
+
+\subsubsection{編集画面の表示（/character/edit/{number}）について}
+編集画面の表示（/character/edit/{number}）の機能の詳細についてプログラム\ref{character_edit1}を
+参照しながら説明を行う．
+
+\begin{lstlisting}[caption=編集画面の表示（/character/edit/{number}）,label=character_edit1]
+app.get("/character/edit/:number", (req, res) => {
+    const number = req.params.number;
+    const detail = states[ number ];
+    res.render('character_edit', {id: number, data: detail} );
+});
+\end{lstlisting}
+
+プログラム\ref{character_edit1}では，既存データを編集するための入力画面を表示することを目的としている．
+１行目で，GETメソッドによる/character/edit/:numberへのアクセスを入力として受け取り，
+２，３行目で指定された番号に対応するデータを取得した上で，編集用フォームを含むページを出力する．
+
+\subsubsection{更新の実行（/character/update/{number}）について}
+更新の実行（/character/update/{number}）の機能の詳細についてプログラム\ref{character_edit2}を
+参照しながら説明を行う．
+
+\begin{lstlisting}[caption=更新の実行（/character/update/{number}）,label=character_edit2]
+app.post("/character/update/:number", (req, res) => {
+    const number = req.params.number;
+    states[req.params.number].name = req.body.name;
+    states[req.params.number].weapon = req.body.weapon;
+    states[req.params.number].chain = req.body.chain;
+    states[req.params.number].sound = req.body.sound;
+    states[req.params.number].H = req.body.H;
+    states[req.params.number].A = req.body.A;
+    states[req.params.number].B = req.body.B;
+    states[req.params.number].C_H = req.body.C_H;
+    states[req.params.number].C_D = req.body.C_D;
+    states[req.params.number].charge = req.body.charge;
+    states[req.params.number].effect = req.body.effect;
+    states[req.params.number].usual = req.body.usual;
+    states[req.params.number].skill = req.body.skill;
+    states[req.params.number].circuit = req.body.circuit;
+    states[req.params.number].release = req.body.release;
+    states[req.params.number].variation = req.body.variation;
+    console.log(states);
+    res.redirect(`/character/${number}`);
+});
+\end{lstlisting}
+
+
+プログラム\ref{character_edit2}では，POSTメソッドによって送信された編集内容を受け取り，
+パスパラメータで指定されたデータを更新する処理を行う．２行目で，更新する対象のデータ番号
+を受け取り，3〜18行目で入力された更新内容を受け取り，配列に新しく格納する．更新完了後は
+20行目で詳細表示へリダイレクトすることで，利用者が変更内容を即座に確認できるようにしている．
+なお，19行目は，動作確認用のデバック出力である．
+
+\subsubsection{削除確認画面の表示（/character\_delete/{number}）について}
+削除確認画面の表示（/character\_delete/{number}）の機能の詳細についてプログラム\ref{character_delete1}を
+参照しながら説明を行う．
+
+\begin{lstlisting}[caption=削除確認画面の表示（/character\_delete/{number}）,label=character_delete1]
+app.get("/character_delete/:number", (req, res) => {
+    const number = req.params.number;
+    const detail = states[ number ];
+    res.render('character_delete', {id: number, data: detail} );
+});
+\end{lstlisting}
+
+プログラム\ref{character_delete1}では，データ削除を実行する前に内容を確認するための画面表示する機能
+をを持つ．１行目では，GETメソッドによる/character\_delete/:numberへのアクセスを入力として受け取り，
+２，３行目で指定された番号に対応するデータを取得した上で，４行目で，削除確認用ページを出力する．
+
+\subsubsection{削除の実行（/holy/delete/{number}）について}
+削除の実行（/character/delete/{number}）の機能の詳細についてプログラム\ref{character_delete2}を
+参照しながら説明を行う．
+
+\begin{lstlisting}[caption=削除の実行（/character/delete/{number}),label=character_delete2]
+app.get("/character/delete/:number", (req, res) => {
+    states.splice( req.params.number, 1 );
+    res.redirect('/character' );
+});
+\end{lstlisting}
+
+プログラム\ref{character_delete2}では，パスパラメータで指定されたデータを配列から削除する処理を行う．
+２行目で，受け取った番号の配列の内容を削除する．削除完了後は一覧表示ページへリダイレクトすることで，
+最新のデータ状態を利用者に提示する．
+
+\end{document}

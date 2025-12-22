@@ -3,12 +3,15 @@
 <head>
     <meta charset="utf-8">
     <title><%= data.name %></title>
+    <style>
+        body {background-color: #E6E6E6; /* 薄い灰色 */}
+    </style>
 </head>
 <body>
     <h2><%= data.name %>の詳細</h2>
     <table>
         <tr><th>項目</th><th>データ</th></tr>
-        
+
         <tr><td>キャラ名</td><td><%= data.name %></td></tr>
         <tr><td>武器名</td><td><%= data.weapon %></td></tr>
         <tr><td>凸数</td><td><%= data.chain %> 凸</td></tr>
@@ -27,9 +30,9 @@
         <tr><td>変奏スキルlv</td><td>Lv. <%= data.variation %></td></tr>
     </table>
     <!-- <a href="/gold/edit/<%= id %>">編集</a> -->
-    <a href="/character">所持キャラ一覧に戻る</a>
-    <a href="/character/edit/<%= id %>">編集</a>
-    <a href="/character_delete/<%= id %>">削除</a>
+    <a href="/character">所持キャラ一覧に戻る</a><br>
+    <a href="/character/edit/<%= id %>">編集</a><br>
+    <a href="/character_delete/<%= id %>">削除</a><br>
     <!-- <a href="gold_delete/<%= id %>">削除</a> -->
     <!-- <a href="/gold/delete/<%= id %>">削除</a> -->
 </body>
